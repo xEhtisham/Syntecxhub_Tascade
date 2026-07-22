@@ -283,6 +283,8 @@ p {
 
 }
 
+
+
 .logo-text {
 
     font-family: var(--font-heading);
@@ -315,33 +317,7 @@ p {
 
 }
 
-#theme-toggle {
 
-    width: 46px;
-
-    height: 46px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    border-radius: 50%;
-
-    border: 1px solid var(--color-border);
-
-}
-
-#theme-toggle:hover {
-
-    border-color: var(--color-accent);
-
-    color: var(--color-accent);
-
-    transform: translateY(-2px);
-
-}
 
 /* ==========================================================
    HERO
