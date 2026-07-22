@@ -473,6 +473,15 @@ p {
     font-weight: 500;
     transition: all .25s ease;
     user-select: none;
+    white-space: nowrap;
+}
+
+.custom-select-trigger .trigger-content {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .custom-select-trigger:hover {
@@ -1511,6 +1520,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     flex-direction: column;
 
     gap: 1.4rem;
+
+}
+
+#edit-form .form-row {
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 1.2rem;
 
 }
 

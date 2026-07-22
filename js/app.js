@@ -21,6 +21,17 @@ const elements = {
   totalTasks: document.querySelector("#total-tasks"),
   completedTasks: document.querySelector("#completed-tasks"),
   progress: document.querySelector("#progress-percent"),
+
+  editModal: document.querySelector("#edit-modal"),
+  editForm: document.querySelector("#edit-form"),
+  editId: document.querySelector("#edit-id"),
+  editTitle: document.querySelector("#edit-title"),
+  editCategory: document.querySelector("#edit-category"),
+  editPriority: document.querySelector("#edit-priority"),
+  editDate: document.querySelector("#edit-date"),
+  editTime: document.querySelector("#edit-time"),
+  closeModalBtn: document.querySelector("#close-modal"),
+  cancelEditBtn: document.querySelector("#cancel-edit"),
 };
 
 /* ==========================================
@@ -49,6 +60,21 @@ function bindEvents() {
   elements.form.addEventListener("submit", handleAddTask);
 
   elements.taskList.addEventListener("click", handleTaskActions);
+
+  if (elements.editForm) {
+    elements.editForm.addEventListener("submit", handleSaveEdit);
+  }
+  if (elements.closeModalBtn) {
+    elements.closeModalBtn.addEventListener("click", closeEditModal);
+  }
+  if (elements.cancelEditBtn) {
+    elements.cancelEditBtn.addEventListener("click", closeEditModal);
+  }
+  if (elements.editModal) {
+    elements.editModal.addEventListener("click", (e) => {
+      if (e.target === elements.editModal) closeEditModal();
+    });
+  }
 }
 
 /* ==========================================
@@ -96,6 +122,13 @@ function handleAddTask(event) {
 }
 
 function handleTaskActions(event) {
+  const editButton = event.target.closest(".edit-btn");
+
+  if (editButton) {
+    openEditModal(editButton.dataset.id);
+    return;
+  }
+
   const deleteButton = event.target.closest(".delete-btn");
 
   if (deleteButton) {
@@ -137,6 +170,54 @@ function toggleTask(id) {
   render();
 
   showToast(task.completed ? "Task completed." : "Task marked as active.");
+}
+
+function openEditModal(id) {
+  const task = tasks.find((t) => t.id === id);
+  if (!task) return;
+
+  elements.editId.value = task.id;
+  elements.editTitle.value = task.title;
+  elements.editCategory.value = task.category || "";
+  elements.editPriority.value = task.priority || "";
+  elements.editDate.value = task.dueDate || "";
+  elements.editTime.value = task.dueTime || "";
+
+  elements.editCategory.dispatchEvent(new Event("change"));
+  elements.editPriority.dispatchEvent(new Event("change"));
+  elements.editDate.dispatchEvent(new Event("change"));
+  elements.editTime.dispatchEvent(new Event("change"));
+
+  elements.editModal.classList.add("active");
+}
+
+function closeEditModal() {
+  elements.editModal.classList.remove("active");
+}
+
+function handleSaveEdit(event) {
+  event.preventDefault();
+
+  const id = elements.editId.value;
+  const task = tasks.find((t) => t.id === id);
+  if (!task) return;
+
+  const newTitle = elements.editTitle.value.trim();
+  if (!newTitle) {
+    showToast("Task title is required.", "error");
+    return;
+  }
+
+  task.title = newTitle;
+  task.category = elements.editCategory.value;
+  task.priority = elements.editPriority.value;
+  task.dueDate = elements.editDate.value;
+  task.dueTime = elements.editTime.value;
+
+  saveTasks();
+  render();
+  closeEditModal();
+  showToast("Task updated successfully.");
 }
 
 /* ==========================================
