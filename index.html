@@ -65,6 +65,7 @@
             </div>
 
         </header>
+
         <section class="hero">
 
             <h2 class="hero-title">
@@ -77,6 +78,81 @@
 
         </section>
 
+        <section class="quick-add">
+
+            <div class="quick-add-header">
+
+                <h3>Add a New Task</h3>
+
+                <p>Capture your next task before you forget it.</p>
+
+            </div>
+
+            <form id="task-form">
+
+                <div class="input-group">
+
+                    <label for="task-title">
+                        Task
+                    </label>
+
+                    <input type="text" id="task-title" placeholder="What needs to be done?" autocomplete="off" required>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label for="task-category">
+                        Category
+                    </label>
+
+                    <select id="task-category">
+
+                        <option value="Personal">Personal</option>
+                        <option value="Work">Work</option>
+                        <option value="Study">Study</option>
+
+                    </select>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label for="task-priority">
+                        Priority
+                    </label>
+
+                    <select id="task-priority">
+
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+
+                    </select>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label for="task-date">
+                        Due Date
+                    </label>
+
+                    <input type="date" id="task-date">
+
+                </div>
+
+                <button type="submit" id="add-task-btn">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add Task
+
+                </button>
+
+            </form>
+
+        </section>
 
     </div>
 
