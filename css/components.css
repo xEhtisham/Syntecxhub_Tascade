@@ -214,3 +214,199 @@
     background: var(--color-accent-hover);
 
 }
+
+/* ==========================================
+   Task Card
+========================================== */
+
+.task-card {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 2rem;
+
+    padding: 1.5rem;
+
+    background: var(--color-surface);
+
+    border: 1px solid var(--color-border);
+
+    border-radius: var(--radius-lg);
+
+    transition: var(--transition-fast);
+
+}
+
+.task-card:hover {
+
+    border-color: var(--color-accent);
+
+    transform: translateY(-2px);
+
+}
+
+.task-left {
+
+    display: flex;
+
+    gap: 1rem;
+
+    flex: 1;
+
+}
+
+.task-check {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 50%;
+
+    border: 1px solid var(--color-border);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: var(--transition-fast);
+
+}
+
+.task-check i {
+
+    opacity: 0;
+
+    transform: scale(.6);
+
+    transition: inherit;
+
+}
+
+.task-check:hover {
+
+    border-color: var(--color-accent);
+
+    background: rgba(197, 139, 78, .12);
+
+}
+
+.task-check:hover i {
+
+    opacity: 1;
+
+    transform: scale(1);
+
+    color: var(--color-accent);
+
+}
+
+.task-content {
+
+    flex: 1;
+
+}
+
+.task-title {
+
+    font-size: 1.2rem;
+
+    margin-bottom: .35rem;
+
+}
+
+.task-description {
+
+    margin-bottom: 1rem;
+
+}
+
+.task-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .75rem;
+
+    flex-wrap: wrap;
+
+}
+
+.task-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: .45rem .9rem;
+
+    border-radius: var(--radius-full);
+
+    font-size: .82rem;
+
+    font-weight: var(--fw-semibold);
+
+    letter-spacing: .02em;
+
+}
+
+.task-badge.category {
+
+    background: var(--color-card);
+
+    color: var(--color-secondary);
+
+    border: 1px solid var(--color-border);
+
+}
+
+.task-badge.priority {
+
+    border: 1px solid transparent;
+
+}
+
+/* High */
+
+.task-badge.priority.high {
+
+    background: rgba(197, 139, 78, .14);
+
+    color: var(--color-accent);
+
+    border-color: rgba(197, 139, 78, .35);
+
+}
+
+/* Medium */
+
+.task-badge.priority.medium {
+
+    background: rgba(255, 255, 255, .06);
+
+    color: var(--color-primary);
+
+    border-color: rgba(255, 255, 255, .08);
+
+}
+
+/* Low */
+
+.task-badge.priority.low {
+
+    background: rgba(79, 163, 106, .12);
+
+    color: var(--color-success);
+
+    border-color: rgba(79, 163, 106, .28);
+
+}
