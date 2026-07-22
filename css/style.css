@@ -42,7 +42,6 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: var(--fw-bold);
     line-height: 1.2;
 }
 
@@ -85,6 +84,7 @@ button {
     cursor: pointer;
     border: none;
     background: none;
+    transition: var(--transition-fast);
 }
 
 input,
@@ -100,9 +100,13 @@ textarea {
 ========================================== */
 
 .container {
+
     width: min(1200px, 92%);
+
     margin-inline: auto;
-    padding: var(--space-4) 0;
+
+    padding: var(--space-5) 0;
+
 }
 
 /* ==========================================
