@@ -2,43 +2,38 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 
-    <head>
+    <title>Tascade</title>
 
-        <meta charset="UTF-8">
+    <!-- Google Fonts -->
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-        <title>Tascade</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=Oi&display=swap"
+        rel="stylesheet">
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Font Awesome -->
 
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-        <link
-            href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=Oi&display=swap"
-            rel="stylesheet">
+    <!-- CSS -->
 
-        <!-- Font Awesome -->
+    <link rel="stylesheet" href="css/variables.css">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 
-        <!-- CSS -->
+    <link rel="stylesheet" href="css/components.css">
 
-        <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/responsive.css">
 
-        <link rel="stylesheet" href="css/style.css">
-
-        <link rel="stylesheet" href="css/components.css">
-
-        <link rel="stylesheet" href="css/responsive.css">
-
-    </head>
+</head>
 
 <body>
 
@@ -151,6 +146,35 @@
                 </button>
 
             </form>
+
+        </section>
+        <section class="task-section">
+
+            <div class="section-header">
+
+                <h3>Your Tasks</h3>
+
+                <p>Manage and track your daily progress.</p>
+
+            </div>
+
+            <div id="task-list">
+
+                <!-- Tasks will be rendered here dynamically -->
+
+            </div>
+
+            <div id="empty-state">
+
+                <i class="fa-regular fa-circle-check"></i>
+
+                <h4>No tasks yet</h4>
+
+                <p>
+                    Start by adding your first task above.
+                </p>
+
+            </div>
 
         </section>
 
