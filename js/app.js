@@ -34,6 +34,10 @@ function init() {
   render();
 }
 
+/* ==========================================
+   Event Binding
+========================================== */
+
 function bindEvents() {
   elements.form.addEventListener("submit", handleAddTask);
 
@@ -49,7 +53,10 @@ function handleAddTask(event) {
 
   const title = elements.title.value.trim();
 
-  if (!title) return;
+  if (!title) {
+    showToast("Task title is required.", "error");
+    return;
+  }
 
   const task = {
     id: generateId(),
@@ -74,20 +81,52 @@ function handleAddTask(event) {
   render();
 
   elements.form.reset();
+
+  showToast("Task added successfully.");
 }
+
 function handleTaskActions(event) {
   const deleteButton = event.target.closest(".delete-btn");
 
   if (deleteButton) {
     deleteTask(deleteButton.dataset.id);
+
+    return;
+  }
+
+  const completeButton = event.target.closest(".task-check");
+
+  if (completeButton) {
+    toggleTask(completeButton.dataset.id);
   }
 }
+
+/* ==========================================
+   Task Operations
+========================================== */
+
 function deleteTask(id) {
   tasks = tasks.filter((task) => task.id !== id);
 
   saveTasks();
 
   render();
+
+  showToast("Task deleted.");
+}
+
+function toggleTask(id) {
+  const task = tasks.find((task) => task.id === id);
+
+  if (!task) return;
+
+  task.completed = !task.completed;
+
+  saveTasks();
+
+  render();
+
+  showToast(task.completed ? "Task completed." : "Task marked as active.");
 }
 
 /* ==========================================
@@ -101,7 +140,7 @@ function render() {
 }
 
 function renderTasks() {
-  if (tasks.length === 0) {
+  if (!tasks.length) {
     elements.taskList.innerHTML = `
 
             <div class="empty-state">
@@ -119,25 +158,29 @@ function renderTasks() {
     return;
   }
 
-  elements.taskList.innerHTML = tasks.map(createTaskCard).join("");
+  const sortedTasks = [...tasks].sort((a, b) => {
+    if (a.completed === b.completed) {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    }
+
+    return a.completed ? 1 : -1;
+  });
+
+  elements.taskList.innerHTML = sortedTasks.map(createTaskCard).join("");
 }
+/* ==========================================
+   Task Card
+========================================== */
 
 function createTaskCard(task) {
-  const formattedDate = task.dueDate
-    ? new Date(task.dueDate).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      })
-    : "No Due Date";
-
   return `
 
-        <article class="task-card">
+        <article class="task-card ${task.completed ? "completed" : ""}">
 
             <div class="task-left">
 
                 <button
-                    class="task-check"
+                    class="task-check ${task.completed ? "completed" : ""}"
                     data-id="${task.id}">
 
                     <i class="fa-solid fa-check"></i>
@@ -168,7 +211,9 @@ function createTaskCard(task) {
 
                         <span class="task-date">
 
-                            ${formattedDate}
+                            <i class="fa-regular fa-calendar"></i>
+
+                            ${formatDate(task.dueDate)}
 
                         </span>
 
@@ -181,7 +226,7 @@ function createTaskCard(task) {
             <div class="task-actions">
 
                 <button
-                    class="icon-btn"
+                    class="icon-btn edit-btn"
                     data-id="${task.id}">
 
                     <i class="fa-regular fa-pen-to-square"></i>
@@ -203,6 +248,10 @@ function createTaskCard(task) {
     `;
 }
 
+/* ==========================================
+   Statistics
+========================================== */
+
 function updateStats() {
   const completed = tasks.filter((task) => task.completed).length;
 
@@ -215,6 +264,58 @@ function updateStats() {
   elements.completedTasks.textContent = completed;
 
   elements.progress.textContent = `${progress}%`;
+}
+
+/* ==========================================
+   Date Formatting
+========================================== */
+
+function formatDate(date) {
+  if (!date) {
+    return "No Due Date";
+  }
+
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+
+    day: "numeric",
+  });
+}
+
+/* ==========================================
+   Toast Notifications
+========================================== */
+
+function showToast(message, type = "success") {
+  const existing = document.querySelector(".toast");
+
+  if (existing) {
+    existing.remove();
+  }
+
+  const toast = document.createElement("div");
+
+  toast.className = `toast toast-${type}`;
+
+  toast.innerHTML = `
+
+        <span>${message}</span>
+
+    `;
+
+  document.body.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+
+    setTimeout(() => {
+      toast.remove();
+    }, 250);
+  }, 2200);
 }
 
 /* ==========================================
@@ -240,7 +341,7 @@ function generateId() {
 }
 
 /* ==========================================
-   Start App
+   Start Application
 ========================================== */
 
 init();
