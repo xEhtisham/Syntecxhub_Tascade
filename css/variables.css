@@ -1,0 +1,98 @@
+:root {
+
+    /* ==========================================
+       Colors
+    ========================================== */
+
+    --color-background: #141414;
+    --color-surface: #1E1E1E;
+    --color-card: #262626;
+
+    --color-primary: #F5F2EC;
+    --color-secondary: #AEA79D;
+
+    --color-accent: #C58B4E;
+    --color-accent-hover: #D69C5B;
+
+    --color-success: #4FA36A;
+    --color-danger: #C85B5B;
+
+    --color-border: #353535;
+
+    /* ==========================================
+       Typography
+    ========================================== */
+
+    --font-heading: "Oi", serif;
+    --font-body: "Manrope", sans-serif;
+
+    /* ==========================================
+       Font Sizes
+    ========================================== */
+
+    --fs-xs: 0.75rem;
+    /* 12px */
+    --fs-sm: 0.875rem;
+    /* 14px */
+    --fs-md: 1rem;
+    /* 16px */
+    --fs-lg: 1.25rem;
+    /* 20px */
+    --fs-xl: 2rem;
+    /* 32px */
+    --fs-2xl: 3rem;
+    /* 48px */
+
+    /* ==========================================
+       Font Weights
+    ========================================== */
+
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+    --fw-extrabold: 800;
+
+    /* ==========================================
+       Spacing (8px System)
+    ========================================== */
+
+    --space-1: .5rem;
+    /* 8px */
+    --space-2: 1rem;
+    /* 16px */
+    --space-3: 1.5rem;
+    /* 24px */
+    --space-4: 2rem;
+    /* 32px */
+    --space-5: 3rem;
+    /* 48px */
+    --space-6: 4rem;
+    /* 64px */
+
+    /* ==========================================
+       Border Radius
+    ========================================== */
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 999px;
+
+    /* ==========================================
+       Shadows
+    ========================================== */
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.20);
+
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+    /* ==========================================
+       Transitions
+    ========================================== */
+
+    --transition-fast: 0.2s ease;
+
+    --transition-normal: 0.3s ease;
+
+}
