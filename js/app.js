@@ -14,6 +14,7 @@ const elements = {
   category: document.querySelector("#task-category"),
   priority: document.querySelector("#task-priority"),
   date: document.querySelector("#task-date"),
+  time: document.querySelector("#task-time"),
 
   taskList: document.querySelector("#task-list"),
 
@@ -29,9 +30,15 @@ const elements = {
 function init() {
   tasks = loadTasks();
 
+  populateDateDropdowns();
+
   bindEvents();
 
   render();
+
+  initCustomSelects();
+
+  initFullBoxPickers();
 }
 
 /* ==========================================
@@ -68,6 +75,8 @@ function handleAddTask(event) {
     priority: elements.priority.value,
 
     dueDate: elements.date.value,
+
+    dueTime: elements.time ? elements.time.value : "",
 
     completed: false,
 
@@ -211,9 +220,9 @@ function createTaskCard(task) {
 
                         <span class="task-date">
 
-                            <i class="fa-regular fa-calendar"></i>
+                            <i class="fa-regular fa-clock"></i>
 
-                            ${formatDate(task.dueDate)}
+                            ${formatDate(task.dueDate, task.dueTime)}
 
                         </span>
 
@@ -270,16 +279,41 @@ function updateStats() {
    Date Formatting
 ========================================== */
 
-function formatDate(date) {
-  if (!date) {
+function formatTime(timeStr) {
+  if (!timeStr) return "";
+  const parts = timeStr.split(":");
+  if (parts.length < 2) return "";
+  let hours = parseInt(parts[0], 10);
+  const minutes = parts[1];
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
+  return `${hours}:${minutes} ${ampm}`;
+}
+
+function formatDate(dateStr, timeStr) {
+  if (!dateStr && !timeStr) {
     return "No Due Date";
   }
 
-  return new Date(date).toLocaleDateString("en-US", {
-    month: "short",
+  let result = "";
+  if (dateStr) {
+    const d = new Date(dateStr + "T00:00:00");
+    if (!isNaN(d.getTime())) {
+      result = d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+    }
+  }
 
-    day: "numeric",
-  });
+  if (timeStr) {
+    const formattedTime = formatTime(timeStr);
+    if (formattedTime) {
+      result = result ? `${result} at ${formattedTime}` : formattedTime;
+    }
+  }
+
+  return result || "No Due Date";
 }
 
 /* ==========================================
@@ -338,6 +372,148 @@ function loadTasks() {
 
 function generateId() {
   return crypto.randomUUID();
+}
+
+/* ==========================================
+   Custom Dropdowns & Pickers
+========================================== */
+
+function getOptionContent(selectId, value, text) {
+  let icon = "";
+  if (value === "Personal") icon = '<i class="fa-solid fa-user" style="color:#C58B4E; margin-right:6px;"></i>';
+  else if (value === "Work") icon = '<i class="fa-solid fa-briefcase" style="color:#C58B4E; margin-right:6px;"></i>';
+  else if (value === "Study") icon = '<i class="fa-solid fa-graduation-cap" style="color:#C58B4E; margin-right:6px;"></i>';
+  else if (value === "Low") icon = '<i class="fa-solid fa-circle" style="color:#4FA36A; font-size:10px; margin-right:6px;"></i>';
+  else if (value === "Medium") icon = '<i class="fa-solid fa-circle" style="color:#F5F2EC; font-size:10px; margin-right:6px;"></i>';
+  else if (value === "High") icon = '<i class="fa-solid fa-circle" style="color:#C58B4E; font-size:10px; margin-right:6px;"></i>';
+  else if (selectId.includes("time")) icon = '<i class="fa-regular fa-clock" style="color:#C58B4E; margin-right:6px;"></i>';
+  else if (selectId.includes("date")) icon = '<i class="fa-regular fa-calendar" style="color:#C58B4E; margin-right:6px;"></i>';
+
+  return `<span>${icon} ${text}</span>`;
+}
+
+function initCustomSelects() {
+  document.querySelectorAll("select.input-field").forEach((select) => {
+    if (select.dataset.customInitialized) return;
+    select.dataset.customInitialized = "true";
+    select.style.display = "none";
+
+    const container = document.createElement("div");
+    container.className = "custom-select-container";
+
+    const trigger = document.createElement("div");
+    trigger.className = "custom-select-trigger";
+
+    const triggerText = document.createElement("span");
+    triggerText.className = "trigger-content";
+    const selectedOption = select.options[select.selectedIndex] || select.options[0];
+    triggerText.innerHTML = getOptionContent(select.id, selectedOption.value, selectedOption.text);
+
+    const chevron = document.createElement("i");
+    chevron.className = "fa-solid fa-chevron-down chevron";
+
+    trigger.appendChild(triggerText);
+    trigger.appendChild(chevron);
+
+    const optionsContainer = document.createElement("div");
+    optionsContainer.className = "custom-select-options";
+
+    Array.from(select.options).forEach((opt) => {
+      const optDiv = document.createElement("div");
+      optDiv.className = `custom-option ${opt.selected ? "selected" : ""}`;
+      optDiv.dataset.value = opt.value;
+      optDiv.innerHTML = getOptionContent(select.id, opt.value, opt.text);
+
+      optDiv.addEventListener("click", (e) => {
+        e.stopPropagation();
+        select.value = opt.value;
+        select.dispatchEvent(new Event("change"));
+
+        optionsContainer.querySelectorAll(".custom-option").forEach((o) => o.classList.remove("selected"));
+        optDiv.classList.add("selected");
+        triggerText.innerHTML = getOptionContent(select.id, opt.value, opt.text);
+        container.classList.remove("open");
+      });
+
+      optionsContainer.appendChild(optDiv);
+    });
+
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.querySelectorAll(".custom-select-container").forEach((c) => {
+        if (c !== container) c.classList.remove("open");
+      });
+      const isOpen = container.classList.toggle("open");
+      if (isOpen) {
+        const selected = optionsContainer.querySelector(".custom-option.selected");
+        if (selected) {
+          selected.scrollIntoView({ block: "nearest" });
+        }
+      }
+    });
+
+    container.appendChild(trigger);
+    container.appendChild(optionsContainer);
+    select.parentNode.insertBefore(container, select);
+
+    select.addEventListener("change", () => {
+      const opt = select.options[select.selectedIndex];
+      if (opt) {
+        triggerText.innerHTML = getOptionContent(select.id, opt.value, opt.text);
+        optionsContainer.querySelectorAll(".custom-option").forEach((o) => {
+          o.classList.toggle("selected", o.dataset.value === opt.value);
+        });
+      }
+    });
+  });
+
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".custom-select-container").forEach((c) => c.classList.remove("open"));
+  });
+}
+
+function populateDateDropdowns() {
+  const dateSelects = [document.querySelector("#task-date"), document.querySelector("#edit-date")];
+  const today = new Date();
+
+  dateSelects.forEach((select) => {
+    if (!select) return;
+    select.innerHTML = '<option value="">Select Date</option>';
+
+    for (let i = 0; i < 30; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const isoDate = `${year}-${month}-${day}`;
+
+      let label = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+      if (i === 0) {
+        label = `Today (${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })})`;
+      } else if (i === 1) {
+        label = `Tomorrow (${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })})`;
+      }
+
+      const opt = document.createElement("option");
+      opt.value = isoDate;
+      opt.textContent = label;
+      select.appendChild(opt);
+    }
+  });
+}
+
+function initFullBoxPickers() {
+  document.querySelectorAll('input[type="date"], input[type="time"]').forEach((input) => {
+    input.addEventListener("click", () => {
+      try {
+        if (typeof input.showPicker === "function") {
+          input.showPicker();
+        }
+      } catch (err) {}
+    });
+  });
 }
 
 /* ==========================================
