@@ -90,6 +90,7 @@ function handleAddTask(event) {
   render();
 
   elements.form.reset();
+  resetCustomSelects(elements.form);
 
   showToast("Task added successfully.");
 }
@@ -182,9 +183,11 @@ function renderTasks() {
 ========================================== */
 
 function createTaskCard(task) {
+  const priorityClass = task.priority ? task.priority.toLowerCase() : "low";
+
   return `
 
-        <article class="task-card ${task.completed ? "completed" : ""}">
+        <article class="task-card priority-${priorityClass} ${task.completed ? "completed" : ""}">
 
             <div class="task-left">
 
@@ -212,7 +215,9 @@ function createTaskCard(task) {
 
                         </span>
 
-                        <span class="task-badge priority ${task.priority.toLowerCase()}">
+                        <span class="task-badge priority ${priorityClass}">
+
+                            <i class="fa-solid fa-circle priority-dot"></i>
 
                             ${task.priority}
 
@@ -281,10 +286,15 @@ function updateStats() {
 
 function formatTime(timeStr) {
   if (!timeStr) return "";
+
+  if (timeStr.includes("AM") || timeStr.includes("PM")) {
+    return timeStr.replace(/^0/, "").trim();
+  }
+
   const parts = timeStr.split(":");
-  if (parts.length < 2) return "";
+  if (parts.length < 2) return timeStr;
   let hours = parseInt(parts[0], 10);
-  const minutes = parts[1];
+  const minutes = parts[1].trim();
   const ampm = hours >= 12 ? "PM" : "AM";
   hours = hours % 12 || 12;
   return `${hours}:${minutes} ${ampm}`;
@@ -383,9 +393,9 @@ function getOptionContent(selectId, value, text) {
   if (value === "Personal") icon = '<i class="fa-solid fa-user" style="color:#C58B4E; margin-right:6px;"></i>';
   else if (value === "Work") icon = '<i class="fa-solid fa-briefcase" style="color:#C58B4E; margin-right:6px;"></i>';
   else if (value === "Study") icon = '<i class="fa-solid fa-graduation-cap" style="color:#C58B4E; margin-right:6px;"></i>';
-  else if (value === "Low") icon = '<i class="fa-solid fa-circle" style="color:#4FA36A; font-size:10px; margin-right:6px;"></i>';
-  else if (value === "Medium") icon = '<i class="fa-solid fa-circle" style="color:#F5F2EC; font-size:10px; margin-right:6px;"></i>';
-  else if (value === "High") icon = '<i class="fa-solid fa-circle" style="color:#C58B4E; font-size:10px; margin-right:6px;"></i>';
+  else if (value === "Low" || value === "Low Priority") icon = '<i class="fa-solid fa-circle" style="color:#4FA36A; font-size:10px; margin-right:6px;"></i>';
+  else if (value === "Medium" || value === "Medium Priority") icon = '<i class="fa-solid fa-circle" style="color:#C58B4E; font-size:10px; margin-right:6px;"></i>';
+  else if (value === "High" || value === "High Priority") icon = '<i class="fa-solid fa-circle" style="color:#C85B5B; font-size:10px; margin-right:6px;"></i>';
   else if (selectId.includes("time")) icon = '<i class="fa-regular fa-clock" style="color:#C58B4E; margin-right:6px;"></i>';
   else if (selectId.includes("date")) icon = '<i class="fa-regular fa-calendar" style="color:#C58B4E; margin-right:6px;"></i>';
 
@@ -467,8 +477,24 @@ function initCustomSelects() {
     });
   });
 
+  document.querySelectorAll("form").forEach((form) => {
+    form.addEventListener("reset", () => {
+      setTimeout(() => {
+        resetCustomSelects(form);
+      }, 0);
+    });
+  });
+
   document.addEventListener("click", () => {
     document.querySelectorAll(".custom-select-container").forEach((c) => c.classList.remove("open"));
+  });
+}
+
+function resetCustomSelects(form) {
+  if (!form) return;
+  form.querySelectorAll("select.input-field").forEach((select) => {
+    select.selectedIndex = 0;
+    select.dispatchEvent(new Event("change"));
   });
 }
 
