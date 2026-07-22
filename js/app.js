@@ -36,6 +36,8 @@ function init() {
 
 function bindEvents() {
   elements.form.addEventListener("submit", handleAddTask);
+
+  elements.taskList.addEventListener("click", handleTaskActions);
 }
 
 /* ==========================================
@@ -72,6 +74,20 @@ function handleAddTask(event) {
   render();
 
   elements.form.reset();
+}
+function handleTaskActions(event) {
+  const deleteButton = event.target.closest(".delete-btn");
+
+  if (deleteButton) {
+    deleteTask(deleteButton.dataset.id);
+  }
+}
+function deleteTask(id) {
+  tasks = tasks.filter((task) => task.id !== id);
+
+  saveTasks();
+
+  render();
 }
 
 /* ==========================================
@@ -173,7 +189,7 @@ function createTaskCard(task) {
                 </button>
 
                 <button
-                    class="icon-btn danger"
+                    class="icon-btn danger delete-btn"
                     data-id="${task.id}">
 
                     <i class="fa-regular fa-trash-can"></i>
