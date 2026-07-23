@@ -1,3 +1,10 @@
+/* =============================================================================
+   Copyright (c) 2026 Tascade. All Rights Reserved.
+   PROPRIETARY & CONFIDENTIAL.
+   Unauthorized copying, reproduction, or distribution of this code,
+   via any medium, is strictly prohibited.
+============================================================================= */
+
 /* ==========================================
    App State
 ========================================== */

@@ -80,6 +80,9 @@ All tasks are stored locally using the browser's Local Storage. No external data
 
 ---
 
-## 📄 License
+## 📄 Copyright & License
 
-This project is open source and available under the MIT License.
+© 2026 Tascade. All Rights Reserved.
+
+This project and its source code are proprietary and confidential. Unauthorized copying, distribution, reproduction, modification, or publication of this project, in whole or in part, via any medium, is strictly prohibited.
+
