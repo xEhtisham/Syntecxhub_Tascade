@@ -2,8 +2,6 @@
 
 A modern, minimalist task management web application built with **HTML, CSS, and JavaScript**. Tascade helps users organize, prioritize, and track their daily tasks through a clean interface with persistent local storage.
 
-![Tascade Preview](./preview.png)
-
 ---
 
 ## ✨ Features
@@ -68,18 +66,6 @@ Open `index.html` in your browser, or use a local development server such as VS 
 ## 💾 Data Storage
 
 All tasks are stored locally using the browser's Local Storage. No external database or backend is required.
-
----
-
-## 📸 Screenshots
-
-### Home
-
-_Add a screenshot here._
-
-### Edit Task
-
-_Add a screenshot here._
 
 ---
 
